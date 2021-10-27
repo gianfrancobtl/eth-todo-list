@@ -25,7 +25,8 @@ App = {
                 await ethereum.enable()
                 // Acccounts now exposed
                 web3.eth.sendTransaction({
-                    /* ... */ })
+                    /* ... */
+                })
             } catch (error) {
                 // User denied account access...
             }
@@ -36,7 +37,8 @@ App = {
             window.web3 = new Web3(web3.currentProvider)
             // Acccounts always exposed
             web3.eth.sendTransaction({
-                /* ... */ })
+                /* ... */
+            })
         }
         // Non-dapp browsers...
         else {
@@ -95,9 +97,9 @@ App = {
             const $newTaskTemplate = $taskTemplate.clone()
             $newTaskTemplate.find('.content').html(taskContent)
             $newTaskTemplate.find('input')
-                .prop('name', taskId)
-                .prop('checked', taskCompleted)
-                .on('click', App.toggleCompleted)
+                            .prop('name', taskId)
+                            .prop('checked', taskCompleted)
+                            .on('click', App.toggleCompleted)
 
             // Put the task in the correct list
             if (taskCompleted) {
@@ -111,6 +113,23 @@ App = {
         }
     },
 
+    createTask: async () => {
+        App.setLoading(true)
+        const content = $('#newTask').val()
+
+        // Conexión con Web3 vía función asincrónica.
+        await App.todoList.createTask(content, {from: App.account})
+        window.location.reload()
+    },
+
+    toggleCompleted: async (e) => {
+        App.setLoading(true)
+        const taskId = e.target.name
+
+        // Conexión con Web3 vía función asincrónica.
+        await App.todoList.toggleCompleted(taskId, {from: App.account})
+        window.location.reload()
+    },
 
     setLoading: (boolean) => {
         App.loading = boolean
